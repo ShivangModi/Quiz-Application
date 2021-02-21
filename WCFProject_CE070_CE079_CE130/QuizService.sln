@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizService", "QuizService\QuizService.csproj", "{B1C85834-75A2-44B8-B628-04B4BA410768}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "Host\Host.csproj", "{0BFFEEDA-F9A7-47FA-A59B-227B28A8F972}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1C85834-75A2-44B8-B628-04B4BA410768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1C85834-75A2-44B8-B628-04B4BA410768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1C85834-75A2-44B8-B628-04B4BA410768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1C85834-75A2-44B8-B628-04B4BA410768}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BFFEEDA-F9A7-47FA-A59B-227B28A8F972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BFFEEDA-F9A7-47FA-A59B-227B28A8F972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BFFEEDA-F9A7-47FA-A59B-227B28A8F972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BFFEEDA-F9A7-47FA-A59B-227B28A8F972}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {90E4490D-F0A1-4F37-B1E4-58312B0B8CF8}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,6 @@
+D:\Sem 6\SOC\Project\QuizService\QuizService\bin\Debug\QuizService.dll
+D:\Sem 6\SOC\Project\QuizService\QuizService\bin\Debug\QuizService.pdb
+D:\Sem 6\SOC\Project\QuizService\QuizService\obj\Debug\QuizService.csprojAssemblyReference.cache
+D:\Sem 6\SOC\Project\QuizService\QuizService\obj\Debug\QuizService.csproj.CoreCompileInputs.cache
+D:\Sem 6\SOC\Project\QuizService\QuizService\obj\Debug\QuizService.dll
+D:\Sem 6\SOC\Project\QuizService\QuizService\obj\Debug\QuizService.pdb
