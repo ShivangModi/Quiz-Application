@@ -1,0 +1,401 @@
+﻿
+@{
+    ViewBag.Title = "Question";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="container" style="margin-top:50px;">
+
+        @*  Select Exam  *@
+        <div class="row" style="margin-bottom:35px;">
+            <div class="col-lg-4 col-md-4 col-sm-8">
+                <select class="form-control" id="ddlExam">
+                </select>
+            </div>
+        </div>
+
+        @*  Add Question  *@
+        <div id="mydiv" class="row" style="height:370px;">
+            <div class="container" style="padding:20px;">
+                <form id="myForm" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">Question Type:</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="ddltype">
+                                <option value="0">Multiple</option>
+                                <option value="1">Single</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="pwd">Question:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="text" placeholder="Enter Question" name="examQue" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="pwd">Option 1:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="option1" placeholder="Enter Option1" name="option" required />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="checkbox" class="c1" id="o1" name="multiselect" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="pwd">Option 2:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="option2" placeholder="Enter Option2" name="option" required />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="checkbox" class="c1" id="o2" name="multiselect" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="pwd">Option 3:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="option3" placeholder="Enter Option3" name="option" required />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="checkbox" class="c1" id="o3" name="multiselect" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="pwd">Option 4:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="option4" placeholder="Enter Option4" name="option" required />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="checkbox" class="c1" id="o4" name="multiselect" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-default" id="btnSubmit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*  Show Question and Edit/Delete Question  *@
+    <div class="container" id="allQuestions" style="margin-top:10px; margin-bottom:25px;">
+
+    </div>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get('id');
+    var allExam = [];
+    var allQuestion = [];
+    var allOption = [];
+
+    @* Check Answer is Single / Multiple *@
+    changeQueType = () => {
+        let id = $("#ddltype").val();
+        if (id == 0) {
+            // Multiple Choice
+            $(".c1").attr("type", "checkbox");
+        }
+        else {
+            // Single Choice
+            $(".c1").attr("type", "radio");
+        }
+    }
+    $("#ddltype").change(function () {
+        changeQueType();
+    });
+
+    GetAnswer = (data) => {
+        var correctAnswer = [];
+        let ans = data.answer.toString();
+        if (ans.includes(',')) {
+            var res = ans.split(",");
+            for (var i = 0; i < res.length; i++) {
+                ans = res[i];
+                if (data.option1 == ans) {
+                    correctAnswer.push(1);
+                } else if (data.option2 == ans) {
+                    correctAnswer.push(2);
+                } else if (data.option3 == ans) {
+                    correctAnswer.push(3);
+                } else if (data.option4 == ans) {
+                    correctAnswer.push(4);
+                }
+            }
+        } else {
+            if (data.option1 == ans) {
+                correctAnswer.push(1);
+            } else if (data.option2 == ans) {
+                correctAnswer.push(2);
+            } else if (data.option3 == ans) {
+                correctAnswer.push(3);
+            } else if (data.option4 == ans) {
+                correctAnswer.push(4);
+            }
+        }
+        return correctAnswer;
+    }
+
+    GetQuestionById = (id) => {
+        var que = allQuestion.find(x => x.id == id);
+        let correctAns = GetAnswer(que);
+
+        $("#ddltype").val(que.type);
+        $("#option1").val(que.option1);
+        $("#option2").val(que.option2);
+        $("#option3").val(que.option3);
+        $("#option4").val(que.option4);
+        $("#text").val(que.text);
+
+        $("html, body").animate({ scrollTop: $("#mydiv").offset().top }, 1000);
+        changeQueType();
+        $("#op1").prop("checked", false);
+        $("#op2").prop("checked", false);
+        $("#op3").prop("checked", false);
+        $("#op4").prop("checked", false);
+
+        $.each(correctAns, function (index, d) {
+            if (d == 1) {
+                $("#op1").prop("checked", true);
+            }
+            if (d == 2) {
+                $("#op2").prop("checked", true);
+            }
+            if (d == 3) {
+                $("#op3").prop("checked", true);
+            }
+            if (d == 4) {
+                $("#op4").prop("checked", true);
+            }
+        });
+    }
+
+    @* Get All Option *@
+    $("#option1").keyup(function () {
+        $("#o1").val($("#option1").val());
+    });
+    $("#option2").keyup(function () {
+        $("#o2").val($("#option2").val());
+    });
+    $("#option3").keyup(function () {
+        $("#o3").val($("#option3").val());
+    });
+    $("#option4").keyup(function () {
+        $("#o4").val($("#option4").val());
+    });
+
+    @* Check Answer is Selected or not *@
+    isAnswerSelected = () => {
+        allOption = [];
+        $.each($("input[name='multiselect']:checked"), function () {
+            allOption.push($(this).val());
+        });
+
+        let bool = (allOption.length > 0) ? true : false;
+        return bool;
+    }
+
+    @* Redirect to /Admin/GetQuestions *@
+    DisplayAllQuestions = (data) => {
+        var html = "";
+        var count = 1;
+        $("#allQuestions div").remove();
+        $.each(data, function (index, row) {
+            let type = "Single";
+            if (row.type == 0) {
+                type = "Multiple";
+            }
+
+            let correctAns = GetAnswer(row);
+            let op1 = "<h4>", op2 = "<h4>", op3 = "<h4>", op4 = "<h4>";
+
+            $.each(correctAns, function (index, d) {
+                if (d == 1) {
+                    op1 = "<h4 style='font-weight:bold; color:green;'>";
+                }
+                if (d == 2) {
+                    op2 = "<h4 style='font-weight:bold; color:green;'>";
+                }
+                if (d == 3) {
+                    op3 = "<h4 style='font-weight:bold; color:green;'>";
+                }
+                if (d == 4) {
+                    op4 = "<h4 style='font-weight:bold; color:green;'>";
+                }
+            });
+
+            html += `
+            <div class="row" style="border:1px solid; min-height:200px; margin-top:20px;">
+                <div style="float:right; margin-top:10px; margin-right:15px;">
+                    <button onclick="GetQuestionById(` + row.id + `)">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+
+                    <button onclick="GetQuestionById(` + row.id + `)">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        <h4> <b> Que.` + count + ` </b> ` + row.text + ` </h4>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        ` + op1 + ` <b> Option1: </b> ` + row.option1 + ` </h4>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        ` + op2 + ` <b> Option2: </b> ` + row.option2 + ` </h4>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        ` + op3 + ` <b> Option3: </b> ` + row.option3 + ` </h4>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        ` + op4 + ` <b> Option4: </b> ` + row.option4 + ` </h4>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        <h4> <b> Type: </b> ` + type + ` </h4>
+                    </div>
+                </div>
+            </div> `;
+            count++;
+        });
+        if (count == 1) {
+            html = `
+            <div class="row" style="margin-top:20px;">
+                <h3 style="color:red; text-align:center"> No Question is added yet </h3>
+            </div>
+                `;
+        }
+        $("#allQuestions").append(html);
+    }
+
+    GetAllQuestions = (id) => {
+        $.ajax({
+            url: "/Admin/GetQuestions/" + id,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                allQuestion = response.data;
+                DisplayAllQuestions(allQuestion);
+            },
+            error: function (xhr, errorType, exception) {
+                console.log("Error");
+            }
+        });
+    }
+
+    @* Check Exam is Selected or not *@
+    isExamSelected = () => {
+        let bool = ($("#ddlExam").val() == -1) ? false : true;
+        return bool;
+    }
+
+    @* Redirect to /Admin/AddQuestions *@
+    $("#btnSubmit").click(function () {
+        let isExam = isExamSelected();
+        let isAnswer = isAnswerSelected();
+
+        if (isExam) {
+            if (isAnswer) {
+                $.ajax(
+                    {
+                        type: 'POST',
+                        url: '/Admin/AddQuestions',
+                        data: {
+                            "answer": allOption.toString(),
+                            "option1": $("#option1").val(),
+                            "option2": $("#option2").val(),
+                            "option3": $("#option3").val(),
+                            "option4": $("#option4").val(),
+                            "text": $("#text").val(),
+                            "type": $("#ddltype").val(),
+                            "examId": $("#ddlExam").val()
+                        },
+                        success: function (response) {
+                            $("#myForm").trigger("reset");
+                            allQuestion.push(response.data);
+                            DisplayAllQuestions(allQuestion);
+                        },
+                        error: function (xhr, status, errorThrown) {
+                            console.log(xhr.status);
+                            console.log(xhr.responseText);
+                        }
+                    }
+                );
+            } else {
+                alert("Please Select an Answer");
+            }
+        } else {
+            alert("Please Select an Exam");
+        }
+    });
+
+    @* Redirect to /Admin/GetExam *@
+    GetAllExams = () => {
+        $.ajax({
+            url: "/Admin/GetExam",
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var html = "<option value=' -1 '> --- Select --- </option>";
+                allExam = data;
+                $("#ddlExam option").remove();
+                $.each(data, function (index, row) {
+                    if (row.examStatus) {
+                        if (row.examId == myParam) {
+                            html += "<option value=' " + row.examId + " ' selected> " + row.examName + " </option>";
+                        } else {
+                            html += "<option value=' " + row.examId + " '> " + row.examName + " </option>";
+                        }
+                    }
+                });
+                $("#ddlExam").append(html);
+            },
+            error: function (xhr, errorType, exception) {
+                console.log("Error");
+            }
+        });
+    }
+    GetAllExams();
+
+    @* Get Question *@
+    $("#ddlExam").change(function () {
+        let examId = $("#ddlExam").val();
+        if (examId != -1) {
+            GetAllQuestions(examId);
+        } else {
+            $("#allQuestions div").remove();
+        }
+    });
+    if (myParam) {
+        GetAllQuestions(myParam);
+    }
+
+</script>
